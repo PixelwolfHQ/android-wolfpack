@@ -46,7 +46,7 @@ internal class ViewHolderConfigImpl<ItemType> : ViewHolderConfig<ItemType> {
     }
 }
 
-data class ViewType<in ItemType>(
+data class ViewType<ItemType>(
     val id: Int,
     val rule: (item: ItemType, position: Int) -> Boolean
 ) {

@@ -7,7 +7,6 @@ import br.com.pixelwolf.example.databinding.MainActivityBinding
 import br.com.pixelwolf.example.databinding.WolfpackExample1Binding
 import br.com.pixelwolf.example.databinding.WolfpackExample2Binding
 import br.com.pixelwolf.example.databinding.WolfpackExample3Binding
-import br.com.pixelwolf.wolfpack.WolfpackConfig
 import br.com.pixelwolf.wolfpack.WolfpackViewHolder
 import br.com.pixelwolf.wolfpack.adapterFor
 import br.com.pixelwolf.wolfpack.config.ViewType
@@ -46,33 +45,30 @@ private data class Example3(val value: String) : Example
 
 private class Example1ViewHolder(
     private val binding: WolfpackExample1Binding
-) : WolfpackViewHolder<Example, WolfpackExample1Binding>(
+) : WolfpackViewHolder<Example1, WolfpackExample1Binding>(
     binding
 ) {
-    override fun bind(item: Example) {
-        item as Example1
+    override fun bind(item: Example1, position: Int) {
         binding.example1.text = item.value
     }
 }
 
 private class Example2ViewHolder(
     private val binding: WolfpackExample2Binding
-) : WolfpackViewHolder<Example, WolfpackExample2Binding>(
+) : WolfpackViewHolder<Example2, WolfpackExample2Binding>(
     binding
 ) {
-    override fun bind(item: Example) {
-        item as Example2
+    override fun bind(item: Example2, position: Int) {
         binding.example2.text = item.value
     }
 }
 
 private class Example3ViewHolder(
     private val binding: WolfpackExample3Binding
-) : WolfpackViewHolder<Example, WolfpackExample3Binding>(
+) : WolfpackViewHolder<Example3, WolfpackExample3Binding>(
     binding
 ) {
-    override fun bind(item: Example) {
-        item as Example3
+    override fun bind(item: Example3, position: Int) {
         binding.example3.text = item.value
     }
 }
