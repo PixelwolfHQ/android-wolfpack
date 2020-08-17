@@ -35,5 +35,5 @@ class WolfpackAdapter<ItemType>(
     override fun onBindViewHolder(
         holder: WolfpackViewHolder<ItemType, ViewBinding>,
         position: Int
-    ) = holder.bind(getItem(position))
+    ) = holder.bind(getItem(position), position)
 }
