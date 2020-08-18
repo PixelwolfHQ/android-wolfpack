@@ -176,7 +176,12 @@ class VehicleAdapter : ListAdapter<Vehicle, RecyclerView.ViewHolder>(
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        when (holder) {
+            is CarViewHolder -> holder.bind(item as Car)
+            is AirplaneViewHolder -> holder.bind(item as Airplane)
+            else -> error("View Holder Type is not mapped: ${holder::class.java.simpleName}")
+        }
     }
 
     inner class CarViewHolder(
