@@ -8,7 +8,7 @@ import br.com.pixelwolf.wolfpack.config.ViewType
 
 class WolfpackAdapter<ItemType>(
     private val config: WolfpackConfig<ItemType>
-) : ListAdapter<ItemType, WolfpackViewHolder<ItemType, ViewBinding>>(config.diff) {
+) : ListAdapter<ItemType, WolfpackViewHolder<ViewBinding>>(config.diff) {
 
     override fun getItemViewType(position: Int): Int {
         if (config.viewTypeRegisters.isEmpty) return ViewType.NONE
@@ -21,19 +21,27 @@ class WolfpackAdapter<ItemType>(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): WolfpackViewHolder<ItemType, ViewBinding> {
-        val holder = config.viewHolderRegisters[viewType]
+    ): WolfpackViewHolder<ViewBinding> {
+        val binding = config.viewHolderRegisters[viewType]
             ?: error("No View Holders are registered for the View Type: $viewType")
 
-        return holder(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+        return WolfpackViewHolder(
+            binding(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
     override fun onBindViewHolder(
-        holder: WolfpackViewHolder<ItemType, ViewBinding>,
+        holder: WolfpackViewHolder<ViewBinding>,
         position: Int
-    ) = holder.bind(getItem(position), position)
+    ) {
+        val viewType = getItemViewType(position)
+        val onBindViewHolder = config.onBindViewHolderRegisters[viewType]
+            ?: error("No View Holder Binders are registered for the View Type: $viewType")
+
+        onBindViewHolder(holder.binding, getItem(position), position)
+    }
 }

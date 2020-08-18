@@ -13,7 +13,8 @@ import br.com.pixelwolf.wolfpack.config.ViewType
 class WolfpackConfig<ItemType> private constructor(
     val diff: DiffUtil.ItemCallback<ItemType>,
     val viewTypeRegisters: ArrayMap<Int, (item: ItemType, position: Int) -> Boolean>,
-    val viewHolderRegisters: ArrayMap<Int, Bindable<ItemType, out ViewBinding>>
+    val viewHolderRegisters: ArrayMap<Int, Bindable<out ViewBinding>>,
+    val onBindViewHolderRegisters: ArrayMap<Int, (ViewBinding, ItemType, Int) -> Unit>
 ) {
 
     class Builder<ItemType> {
@@ -26,15 +27,17 @@ class WolfpackConfig<ItemType> private constructor(
             areContentsTheSame: (oldItem: ItemType, newItem: ItemType) -> Boolean
         ) = diffConfig.diff(areItemsTheSame, areContentsTheSame)
 
-        fun <BindingType : ViewBinding> viewHolder(
-            viewHolder: Bindable<ItemType, BindingType>,
+        fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+            binding: Bindable<BindingType>,
+            onBindViewHolder: (BindingType, ItemSubType, Int) -> Unit,
             viewType: ViewType<ItemType>? = null
-        ) = viewHolderConfig.viewHolder(viewHolder, viewType)
+        ) = viewHolderConfig.viewHolder(binding, onBindViewHolder, viewType)
 
-        fun build() = WolfpackConfig(
+        fun build(): WolfpackConfig<ItemType> = WolfpackConfig(
             diffConfig.diff,
             viewHolderConfig.viewTypeRegisters,
-            viewHolderConfig.viewHolderRegisters
+            viewHolderConfig.bindingRegisters,
+            viewHolderConfig.onBindRegisters
         )
     }
 }
