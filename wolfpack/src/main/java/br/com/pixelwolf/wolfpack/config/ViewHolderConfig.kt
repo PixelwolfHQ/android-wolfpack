@@ -23,7 +23,7 @@ internal interface ViewHolderConfig<ItemType> {
     val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
     val viewTypeRegisters: ArrayMap<Int, (item: ItemType, position: Int) -> Boolean>
 
-    fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+    fun <ItemSubType : ItemType, BindingType : ViewBinding> viewHolder(
         binding: Bindable<BindingType>,
         onBind: OnBind<ItemSubType, BindingType>,
         viewType: ViewType<ItemType>? = null
@@ -48,7 +48,7 @@ internal class ViewHolderConfigImpl<ItemType> : ViewHolderConfig<ItemType> {
 
     override val viewTypeRegisters = arrayMapOf<Int, (item: ItemType, position: Int) -> Boolean>()
 
-    override fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+    override fun <ItemSubType : ItemType, BindingType : ViewBinding> viewHolder(
         binding: Bindable<BindingType>,
         onBind: OnBind<ItemSubType, BindingType>,
         viewType: ViewType<ItemType>?

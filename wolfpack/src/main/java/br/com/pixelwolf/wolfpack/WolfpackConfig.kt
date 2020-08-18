@@ -28,11 +28,11 @@ class WolfpackConfig<ItemType> private constructor(
             areContentsTheSame: (oldItem: ItemType, newItem: ItemType) -> Boolean
         ) = diffConfig.diff(areItemsTheSame, areContentsTheSame)
 
-        fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+        fun <ItemSubType : ItemType, BindingType : ViewBinding> viewHolder(
             binding: Bindable<BindingType>,
-            onBindViewHolder: (BindingType, ItemSubType, Int) -> Unit,
+            onBind: OnBind<ItemSubType, BindingType>,
             viewType: ViewType<ItemType>? = null
-        ) = viewHolderConfig.viewHolder(binding, onBindViewHolder, viewType)
+        ) = viewHolderConfig.viewHolder(binding, onBind, viewType)
 
         fun build(): WolfpackConfig<ItemType> = WolfpackConfig(
             diffConfig.diff,
