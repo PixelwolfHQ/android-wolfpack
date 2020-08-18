@@ -39,7 +39,7 @@ class WolfpackAdapter<ItemType>(
         position: Int
     ) {
         val viewType = getItemViewType(position)
-        val onBindViewHolder = config.onBindViewHolderRegisters[viewType]
+        val onBindViewHolder = config.onBindRegisters[viewType]
             ?: error("No View Holder Binders are registered for the View Type: $viewType")
 
         onBindViewHolder(holder.binding, getItem(position), position)

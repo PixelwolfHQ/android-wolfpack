@@ -6,6 +6,7 @@ import androidx.viewbinding.ViewBinding
 import br.com.pixelwolf.wolfpack.config.Bindable
 import br.com.pixelwolf.wolfpack.config.DiffConfig
 import br.com.pixelwolf.wolfpack.config.DiffConfigImpl
+import br.com.pixelwolf.wolfpack.config.OnBind
 import br.com.pixelwolf.wolfpack.config.ViewHolderConfig
 import br.com.pixelwolf.wolfpack.config.ViewHolderConfigImpl
 import br.com.pixelwolf.wolfpack.config.ViewType
@@ -14,7 +15,7 @@ class WolfpackConfig<ItemType> private constructor(
     val diff: DiffUtil.ItemCallback<ItemType>,
     val viewTypeRegisters: ArrayMap<Int, (item: ItemType, position: Int) -> Boolean>,
     val viewHolderRegisters: ArrayMap<Int, Bindable<out ViewBinding>>,
-    val onBindViewHolderRegisters: ArrayMap<Int, (ViewBinding, ItemType, Int) -> Unit>
+    val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
 ) {
 
     class Builder<ItemType> {

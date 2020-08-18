@@ -12,20 +12,20 @@ internal typealias Bindable<BindingType> = (
     attachToParent: Boolean
 ) -> BindingType
 
-internal typealias OnBind<ItemType, BindingType> = (
+internal typealias OnBind<ItemSubType, BindingType> = (
     binding: BindingType,
-    item: ItemType,
+    item: ItemSubType,
     position: Int
 ) -> Unit
 
 internal interface ViewHolderConfig<ItemType> {
     val bindingRegisters: ArrayMap<Int, Bindable<out ViewBinding>>
-    val onBindRegisters: ArrayMap<Int, (ViewBinding, ItemType, Int) -> Unit>
+    val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
     val viewTypeRegisters: ArrayMap<Int, (item: ItemType, position: Int) -> Boolean>
 
     fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
         binding: Bindable<BindingType>,
-        onBind: (BindingType, ItemSubType, Int) -> Unit,
+        onBind: OnBind<ItemSubType, BindingType>,
         viewType: ViewType<ItemType>? = null
     )
 }
@@ -39,8 +39,8 @@ internal class ViewHolderConfigImpl<ItemType> : ViewHolderConfig<ItemType> {
             return innerBindingRegisters
         }
 
-    private val innerOnBindRegisters = arrayMapOf<Int, (ViewBinding, ItemType, Int) -> Unit>()
-    override val onBindRegisters: ArrayMap<Int, (ViewBinding, ItemType, Int) -> Unit>
+    private val innerOnBindRegisters = arrayMapOf<Int, OnBind<ItemType, ViewBinding>>()
+    override val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
         get() {
             if (innerOnBindRegisters.isEmpty) error("At least one View Holder Binder must be registered")
             return innerOnBindRegisters
@@ -50,7 +50,7 @@ internal class ViewHolderConfigImpl<ItemType> : ViewHolderConfig<ItemType> {
 
     override fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
         binding: Bindable<BindingType>,
-        onBind: (BindingType, ItemSubType, Int) -> Unit,
+        onBind: OnBind<ItemSubType, BindingType>,
         viewType: ViewType<ItemType>?
     ) {
         val viewTypeId = viewType?.id ?: ViewType.NONE
