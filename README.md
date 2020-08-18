@@ -1,13 +1,13 @@
 # Wolfpack :wolf: :wolf: :wolf:
 
+**Wolfpack** is a ListAdapter abstraction, being:
+
 - Kotlin-first
 - ViewBinding-first
 - Boiler Plate-free
 - Easy-to-use DSL
 
-Tired of implementing the same bloated code of the **RecyclerView Adapters** and **ViewHolders** over and over for each time we need to handle a list in Android, we decided to create this library which omits the manual creation of these components.
-
-**Wolfpack** follows the good practices of Android and development and uses the latest dependencies.
+Tired of implementing the same bloated code of the **RecyclerView Adapters** and **ViewHolders** over and over for each time we need to handle a list in Android, we have decided to create this library which omits the manual creation of these components.
 
 ##### **Alert:** At the moment it is not possible to use Layout Resources instead of ViewBinding. [@ibrahimyilmaz](https://github.com/ibrahimyilmaz) has a solution named [Kiel](https://github.com/ibrahimyilmaz/kiel) that uses them.
 
@@ -33,7 +33,7 @@ val adapter = adapterFor<Recipe> {
     build()
 }
 
-// or
+// or with the longer version
 
 val adapter = adapterFor<Recipe> {
     viewHolder(
@@ -131,7 +131,7 @@ val adapter = adapterFor<Vehicle> {
         }
         viewType = ViewType(
             id = 2,
-            rule = { item, oosition -> item is Airplane }
+            rule = { item, position -> item is Airplane }
         )
     )
     diff(

@@ -45,17 +45,17 @@ private data class Example3(val value: String) : Example
 private val exampleAdapter = adapterFor<Example> {
     viewHolder<Example1, WolfpackExample1Binding>(
         binding = WolfpackExample1Binding::inflate,
-        onBindViewHolder = { binding, item, _ -> binding.example1.text = item.value },
+        onBind = { binding, item, _ -> binding.example1.text = item.value },
         viewType = ViewType(id = 1, rule = { item, _ -> item is Example1 })
     )
     viewHolder<Example2, WolfpackExample2Binding>(
         binding = WolfpackExample2Binding::inflate,
-        onBindViewHolder = { binding, item, _ -> binding.example2.text = item.value },
+        onBind = { binding, item, _ -> binding.example2.text = item.value },
         viewType = ViewType(id = 2, rule = { item, _ -> item is Example2 })
     )
     viewHolder<Example3, WolfpackExample3Binding>(
         binding = WolfpackExample3Binding::inflate,
-        onBindViewHolder = { binding, item, _ -> binding.example3.text = item.value },
+        onBind = { binding, item, _ -> binding.example3.text = item.value },
         viewType = ViewType(id = 3, rule = { item, _ -> item is Example3 })
     )
     diff(
