@@ -6,6 +6,7 @@ import androidx.viewbinding.ViewBinding
 import br.com.pixelwolf.wolfpack.config.Bindable
 import br.com.pixelwolf.wolfpack.config.DiffConfig
 import br.com.pixelwolf.wolfpack.config.DiffConfigImpl
+import br.com.pixelwolf.wolfpack.config.OnBind
 import br.com.pixelwolf.wolfpack.config.ViewHolderConfig
 import br.com.pixelwolf.wolfpack.config.ViewHolderConfigImpl
 import br.com.pixelwolf.wolfpack.config.ViewType
@@ -13,7 +14,8 @@ import br.com.pixelwolf.wolfpack.config.ViewType
 class WolfpackConfig<ItemType> private constructor(
     val diff: DiffUtil.ItemCallback<ItemType>,
     val viewTypeRegisters: ArrayMap<Int, (item: ItemType, position: Int) -> Boolean>,
-    val viewHolderRegisters: ArrayMap<Int, Bindable<ItemType, out ViewBinding>>
+    val viewHolderRegisters: ArrayMap<Int, Bindable<out ViewBinding>>,
+    val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
 ) {
 
     class Builder<ItemType> {
@@ -26,15 +28,17 @@ class WolfpackConfig<ItemType> private constructor(
             areContentsTheSame: (oldItem: ItemType, newItem: ItemType) -> Boolean
         ) = diffConfig.diff(areItemsTheSame, areContentsTheSame)
 
-        fun <BindingType : ViewBinding> viewHolder(
-            viewHolder: Bindable<ItemType, BindingType>,
+        fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+            binding: Bindable<BindingType>,
+            onBindViewHolder: (BindingType, ItemSubType, Int) -> Unit,
             viewType: ViewType<ItemType>? = null
-        ) = viewHolderConfig.viewHolder(viewHolder, viewType)
+        ) = viewHolderConfig.viewHolder(binding, onBindViewHolder, viewType)
 
-        fun build() = WolfpackConfig(
+        fun build(): WolfpackConfig<ItemType> = WolfpackConfig(
             diffConfig.diff,
             viewHolderConfig.viewTypeRegisters,
-            viewHolderConfig.viewHolderRegisters
+            viewHolderConfig.bindingRegisters,
+            viewHolderConfig.onBindRegisters
         )
     }
 }
