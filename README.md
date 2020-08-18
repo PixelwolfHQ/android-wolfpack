@@ -33,7 +33,7 @@ val adapter = adapterFor<Recipe> {
     build()
 }
 
-// or
+// or with the longer version
 
 val adapter = adapterFor<Recipe> {
     viewHolder(
@@ -131,7 +131,7 @@ val adapter = adapterFor<Vehicle> {
         }
         viewType = ViewType(
             id = 2,
-            rule = { item, oosition -> item is Airplane }
+            rule = { item, position -> item is Airplane }
         )
     )
     diff(

@@ -30,9 +30,9 @@ class WolfpackConfig<ItemType> private constructor(
 
         fun <ItemSubType : ItemType, BindingType : ViewBinding> viewHolder(
             binding: Bindable<BindingType>,
-            onBindViewHolder: OnBind<ItemSubType, BindingType>,
+            onBind: OnBind<ItemSubType, BindingType>,
             viewType: ViewType<ItemType>? = null
-        ) = viewHolderConfig.viewHolder(binding, onBindViewHolder, viewType)
+        ) = viewHolderConfig.viewHolder(binding, onBind, viewType)
 
         fun build(): WolfpackConfig<ItemType> = WolfpackConfig(
             diffConfig.diff,
