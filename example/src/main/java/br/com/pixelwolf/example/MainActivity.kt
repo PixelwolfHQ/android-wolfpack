@@ -43,41 +43,20 @@ private data class Example2(val value: String) : Example
 private data class Example3(val value: String) : Example
 
 private val exampleAdapter = adapterFor<Example> {
-    viewHolder(
-        binding = { inflater, parent, attachToParent ->
-            WolfpackExample1Binding.inflate(inflater, parent, attachToParent)
-        },
-        onBindViewHolder = { binding, item: Example1, _ ->
-            binding.example1.text = item.value
-        },
-        viewType = ViewType(
-            id = 1,
-            rule = { item, _ -> item is Example1 }
-        )
+    viewHolder<Example1, WolfpackExample1Binding>(
+        binding = WolfpackExample1Binding::inflate,
+        onBindViewHolder = { binding, item, _ -> binding.example1.text = item.value },
+        viewType = ViewType(id = 1, rule = { item, _ -> item is Example1 })
     )
-    viewHolder(
-        binding = { inflater, parent, attachToParent ->
-            WolfpackExample2Binding.inflate(inflater, parent, attachToParent)
-        },
-        onBindViewHolder = { binding, item: Example2, _ ->
-            binding.example2.text = item.value
-        },
-        viewType = ViewType(
-            id = 2,
-            rule = { item, _ -> item is Example2 }
-        )
+    viewHolder<Example2, WolfpackExample2Binding>(
+        binding = WolfpackExample2Binding::inflate,
+        onBindViewHolder = { binding, item, _ -> binding.example2.text = item.value },
+        viewType = ViewType(id = 2, rule = { item, _ -> item is Example2 })
     )
-    viewHolder(
-        binding = { inflater, parent, attachToParent ->
-            WolfpackExample3Binding.inflate(inflater, parent, attachToParent)
-        },
-        onBindViewHolder = { binding, item: Example3, _ ->
-            binding.example3.text = item.value
-        },
-        viewType = ViewType(
-            id = 3,
-            rule = { item, _ -> item is Example3 }
-        )
+    viewHolder<Example3, WolfpackExample3Binding>(
+        binding = WolfpackExample3Binding::inflate,
+        onBindViewHolder = { binding, item, _ -> binding.example3.text = item.value },
+        viewType = ViewType(id = 3, rule = { item, _ -> item is Example3 })
     )
     diff(
         areItemsTheSame = { oldItem, newItem -> oldItem == newItem },

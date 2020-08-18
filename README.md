@@ -5,7 +5,7 @@
 - Boiler Plate-free
 - Easy-to-use DSL
 
-Tired of implementing the same bloated code of the **RecyclerView Adapters** over and over each time we need to handle a list in Android, we decided to create this library which omits the creation of an adapter and eases the creation of ViewHolders.
+Tired of implementing the same bloated code of the **RecyclerView Adapters** and **ViewHolders** over and over for each time we need to handle a list in Android, we decided to create this library which omits the manual creation of these components.
 
 **Wolfpack** follows the good practices of Android and development and uses the latest dependencies.
 
@@ -13,19 +13,17 @@ Tired of implementing the same bloated code of the **RecyclerView Adapters** ove
 
 ---
 
-## Simple Usage
+## Simple Usage - Only one View Type
 
 ```kotlin
 val adapter = adapterFor<Recipe> {
-    viewHolder(
-        viewHolder = { inflater, parent, attachToParent ->
-            RecipeViewHolder(
-                RecipeBinding.inflate(
-                    inflater,
-                    parent,
-                    attachToParent
-                )
-            )
+    viewHolder<Recipe, RecipeBinding>(
+        binding = RecipeBinding::inflate,
+        onBind = { binding, item, position ->
+            binding.apply {
+                image.load(item.photoUrl)
+                description.text = item.description
+            }
         }
     )
     diff(
@@ -35,18 +33,25 @@ val adapter = adapterFor<Recipe> {
     build()
 }
 
-// A anonymous class could be used instead this one
-class RecipeViewHolder(
-    private val binding: RecipeBinding
-) : WolfpackViewHolder<Recipe, RecipeBinding>(
-    binding
-) {
-    override fun bind(item: Recipe, position: Int) {
-        binding.apply {
-            image.load(item.photoUrl)
-            description.text = item.description
+// or
+
+val adapter = adapterFor<Recipe> {
+    viewHolder(
+        binding = { inflater, parent, attachToParent ->
+            RecipeBinding.inflate(inflater, parent, attachToParent)
+        },
+        onBind = { binding, item: Recipe, position ->
+            binding.apply {
+                image.load(item.photoUrl)
+                description.text = item.description
+            }
         }
-    }
+    )
+    diff(
+        areItemsTheSame = { oldItem, newItem -> oldItem == newItem },
+        areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+    )
+    build()
 }
 ```
 
@@ -84,14 +89,13 @@ class RecipeAdapter : ListAdapter<Recipe, RecipeAdapter.ViewHolder>(
 
     private companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Recipe>() {
-            override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean = oldItem.id == newItem.id
+            override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean = oldItem == newItem
 
-            override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean = oldItem == newItem
         }
     }
 
 }
-
 ```
 
 </details>
@@ -102,34 +106,32 @@ class RecipeAdapter : ListAdapter<Recipe, RecipeAdapter.ViewHolder>(
 
 ```kotlin
 val adapter = adapterFor<Vehicle> {
-    viewHolder(
-        viewHolder = { inflater, parent, attachToParent ->
-            CarViewHolder(
-                CarBinding.inflate(
-                    inflater,
-                    parent,
-                    attachToParent
-                )
-            )
-        },
+    viewHolder<Car, CarBinding>(
+        binding = CarBinding::inflate,
+        onBind = { binding, item, position ->
+            binding.apply {
+                image.load(item.photoUrl)
+                name.text = item.name
+                horsepower.text = item.horsepower
+            }
+        }
         viewType = ViewType(
             id = 1,
-            rule = { item, _ -> item is Car }
+            rule = { item, position -> item is Car }
         )
     )
-    viewHolder(
-        viewHolder = { inflater, parent, attachToParent ->
-            AirplaneViewHolder(
-                AirplaneBinding.inflate(
-                    inflater,
-                    parent,
-                    attachToParent
-                )
-            )
-        },
+    viewHolder<Airplane, AirplaneBinding>(
+        binding = AirplaneBinding::inflate,
+        onBind = { binding, item, position ->
+            binding.apply {
+                image.load(item.photoUrl)
+                name.text = item.name
+                seats.text = item.seats
+            }
+        }
         viewType = ViewType(
             id = 2,
-            rule = { item, _ -> item is Airplane }
+            rule = { item, oosition -> item is Airplane }
         )
     )
     diff(
@@ -137,34 +139,6 @@ val adapter = adapterFor<Vehicle> {
         areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     )
     build()
-}
-
-class CarViewHolder(
-    private val binding: CarBinding
-) : WolfpackViewHolder<Car, CarBinding>(
-    binding
-) {
-    override fun bind(item: Car, position: Int) {
-        binding.apply {
-            image.load(item.photoUrl)
-            name.text = item.name
-            horsepower.text = item.horsepower
-        }
-    }
-}
-
-class AirplaneViewHolder(
-    private val binding: AirplaneBinding
-) : WolfpackViewHolder<Airplane, AirplaneBinding>(
-    binding
-) {
-    override fun bind(item: Airplane, position: Int) {
-        binding.apply {
-            image.load(item.photoUrl)
-            name.text = item.name
-            seats.text = item.seats
-        }
-    }
 }
 ```
 
