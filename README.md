@@ -1,6 +1,6 @@
 # Wolfpack :wolf: :wolf: :wolf:
 
-**Wolfpack** is a ListAdapter abstraction, being:
+**Wolfpack** is an Android [ListAdapter](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter) abstraction, being:
 
 - Kotlin-first
 - ViewBinding-first
