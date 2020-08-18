@@ -7,7 +7,6 @@ import br.com.pixelwolf.example.databinding.MainActivityBinding
 import br.com.pixelwolf.example.databinding.WolfpackExample1Binding
 import br.com.pixelwolf.example.databinding.WolfpackExample2Binding
 import br.com.pixelwolf.example.databinding.WolfpackExample3Binding
-import br.com.pixelwolf.wolfpack.WolfpackViewHolder
 import br.com.pixelwolf.wolfpack.adapterFor
 import br.com.pixelwolf.wolfpack.config.ViewType
 
@@ -43,40 +42,13 @@ private data class Example1(val value: String) : Example
 private data class Example2(val value: String) : Example
 private data class Example3(val value: String) : Example
 
-private class Example1ViewHolder(
-    private val binding: WolfpackExample1Binding
-) : WolfpackViewHolder<Example1, WolfpackExample1Binding>(
-    binding
-) {
-    override fun bind(item: Example1, position: Int) {
-        binding.example1.text = item.value
-    }
-}
-
-private class Example2ViewHolder(
-    private val binding: WolfpackExample2Binding
-) : WolfpackViewHolder<Example2, WolfpackExample2Binding>(
-    binding
-) {
-    override fun bind(item: Example2, position: Int) {
-        binding.example2.text = item.value
-    }
-}
-
-private class Example3ViewHolder(
-    private val binding: WolfpackExample3Binding
-) : WolfpackViewHolder<Example3, WolfpackExample3Binding>(
-    binding
-) {
-    override fun bind(item: Example3, position: Int) {
-        binding.example3.text = item.value
-    }
-}
-
 private val exampleAdapter = adapterFor<Example> {
     viewHolder(
-        viewHolder = { inflater, parent, attachToParent ->
-            Example1ViewHolder(WolfpackExample1Binding.inflate(inflater, parent, attachToParent))
+        binding = { inflater, parent, attachToParent ->
+            WolfpackExample1Binding.inflate(inflater, parent, attachToParent)
+        },
+        onBindViewHolder = { binding, item: Example1, _ ->
+            binding.example1.text = item.value
         },
         viewType = ViewType(
             id = 1,
@@ -84,8 +56,11 @@ private val exampleAdapter = adapterFor<Example> {
         )
     )
     viewHolder(
-        viewHolder = { inflater, parent, attachToParent ->
-            Example2ViewHolder(WolfpackExample2Binding.inflate(inflater, parent, attachToParent))
+        binding = { inflater, parent, attachToParent ->
+            WolfpackExample2Binding.inflate(inflater, parent, attachToParent)
+        },
+        onBindViewHolder = { binding, item: Example2, _ ->
+            binding.example2.text = item.value
         },
         viewType = ViewType(
             id = 2,
@@ -93,8 +68,11 @@ private val exampleAdapter = adapterFor<Example> {
         )
     )
     viewHolder(
-        viewHolder = { inflater, parent, attachToParent ->
-            Example3ViewHolder(WolfpackExample3Binding.inflate(inflater, parent, attachToParent))
+        binding = { inflater, parent, attachToParent ->
+            WolfpackExample3Binding.inflate(inflater, parent, attachToParent)
+        },
+        onBindViewHolder = { binding, item: Example3, _ ->
+            binding.example3.text = item.value
         },
         viewType = ViewType(
             id = 3,

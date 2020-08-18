@@ -5,43 +5,61 @@ import android.view.ViewGroup
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import androidx.viewbinding.ViewBinding
-import br.com.pixelwolf.wolfpack.WolfpackViewHolder
 
-internal typealias Bindable<ItemType, BindingType> = (
-    LayoutInflater,
-    ViewGroup,
-    Boolean
-) -> WolfpackViewHolder<ItemType, BindingType>
+internal typealias Bindable<BindingType> = (
+    inflater: LayoutInflater,
+    parent: ViewGroup,
+    attachToParent: Boolean
+) -> BindingType
+
+internal typealias OnBind<ItemSubType, BindingType> = (
+    binding: BindingType,
+    item: ItemSubType,
+    position: Int
+) -> Unit
 
 internal interface ViewHolderConfig<ItemType> {
-    val viewHolderRegisters: ArrayMap<Int, Bindable<ItemType, out ViewBinding>>
+    val bindingRegisters: ArrayMap<Int, Bindable<out ViewBinding>>
+    val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
     val viewTypeRegisters: ArrayMap<Int, (item: ItemType, position: Int) -> Boolean>
 
-    fun <BindingType : ViewBinding> viewHolder(
-        viewHolder: Bindable<ItemType, BindingType>,
+    fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+        binding: Bindable<BindingType>,
+        onBind: OnBind<ItemSubType, BindingType>,
         viewType: ViewType<ItemType>? = null
     )
 }
 
 internal class ViewHolderConfigImpl<ItemType> : ViewHolderConfig<ItemType> {
 
-    private val innerViewHolderRegisters = arrayMapOf<Int, Bindable<ItemType, out ViewBinding>>()
-
-    override val viewHolderRegisters: ArrayMap<Int, Bindable<ItemType, out ViewBinding>>
+    private val innerBindingRegisters = arrayMapOf<Int, Bindable<out ViewBinding>>()
+    override val bindingRegisters: ArrayMap<Int, Bindable<out ViewBinding>>
         get() {
-            if (innerViewHolderRegisters.isEmpty) error("At least one View Holder must be registered")
-            return innerViewHolderRegisters
+            if (innerBindingRegisters.isEmpty) error("At least one View Holder must be registered")
+            return innerBindingRegisters
+        }
+
+    private val innerOnBindRegisters = arrayMapOf<Int, OnBind<ItemType, ViewBinding>>()
+    override val onBindRegisters: ArrayMap<Int, OnBind<ItemType, ViewBinding>>
+        get() {
+            if (innerOnBindRegisters.isEmpty) error("At least one View Holder Binder must be registered")
+            return innerOnBindRegisters
         }
 
     override val viewTypeRegisters = arrayMapOf<Int, (item: ItemType, position: Int) -> Boolean>()
 
-    override fun <BindingType : ViewBinding> viewHolder(
-        viewHolder: Bindable<ItemType, BindingType>,
+    override fun <BindingType : ViewBinding, ItemSubType : ItemType> viewHolder(
+        binding: Bindable<BindingType>,
+        onBind: OnBind<ItemSubType, BindingType>,
         viewType: ViewType<ItemType>?
     ) {
         val viewTypeId = viewType?.id ?: ViewType.NONE
 
-        this.innerViewHolderRegisters[viewTypeId] = viewHolder
+        this.innerBindingRegisters[viewTypeId] = binding
+
+        @Suppress("UNCHECKED_CAST")
+        this.innerOnBindRegisters[viewTypeId] = onBind as (ViewBinding, ItemType, Int) -> Unit
+
         viewType?.rule.let { rule -> this.viewTypeRegisters[viewTypeId] = rule }
     }
 }
