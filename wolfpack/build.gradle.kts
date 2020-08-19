@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    id("maven-publish")
     kotlin("android")
     kotlin("android.extensions")
 }
@@ -30,6 +31,21 @@ android {
 
     buildFeatures {
         viewBinding = true
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = "br.com.pixelwolf"
+                artifactId = "wolfpack"
+                version = "0.1.0"
+            }
+        }
     }
 }
 
