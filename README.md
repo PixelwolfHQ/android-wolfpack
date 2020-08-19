@@ -5,7 +5,7 @@
 - Kotlin-first
 - ViewBinding-first
 - Boiler Plate-free
-- Easy-to-use DSL
+- Easy-to-use
 
 Tired of implementing the same bloated code of the **RecyclerView Adapters** and **ViewHolders** over and over for each time we need to handle a list in Android, we have decided to create this library which omits the manual creation of these components.
 
