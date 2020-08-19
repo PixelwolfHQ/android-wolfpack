@@ -1,4 +1,4 @@
 include(":app")
 include(":wolfpack")
 
-rootProject.name = "wolfpack"
+rootProject.name = "android-wolfpack"
