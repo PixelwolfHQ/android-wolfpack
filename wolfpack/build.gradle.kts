@@ -44,10 +44,14 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
-
-                // You can then customize attributes of the publication as shown below.
                 groupId = "br.com.pixelwolf"
                 artifactId = "wolfpack"
+                version = "0.1.0"
+            }
+            create<MavenPublication>("debug") {
+                from(components["debug"])
+                groupId = "br.com.pixelwolf"
+                artifactId = "wolfpack-debug"
                 version = "0.1.0"
             }
         }
