@@ -6,7 +6,7 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:4.0.1")
-        classpath(embeddedKotlin("gradle-plugin"))
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
     }
 }
 
