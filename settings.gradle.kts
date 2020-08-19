@@ -1,4 +1,4 @@
-include(":example")
+include(":app")
 include(":wolfpack")
 
-rootProject.name = "example"
+rootProject.name = "wolfpack"
